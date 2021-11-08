@@ -39,58 +39,58 @@ type traceRow struct {
 	Line     int    `json:"line"`
 }
 
-// TODO: Дублирование функицонала с дублирование функционала AddMsg
-// SetMsg - для изменения поля msg на передаваемую строку `msg`
+// TODO: Дублирование функицонала с дублирование функционала AddMsg.
+//  SetMsg - для изменения поля msg на передаваемую строку `msg`.
 func (e *extendedErr) SetMsg(msg string) ErrExtender {
 	e.msg = msg
 	return e
 }
 
-// SetAltMsg - для изменения поля altMsg на передаваемую строку `altMsg`
+// SetAltMsg - для изменения поля altMsg на передаваемую строку `altMsg`.
 func (e *extendedErr) SetAltMsg(altMsg string) ErrExtender {
 	e.altMsg = altMsg
 	return e
 }
 
-// SetErrCode - для изменения кода ошибки errCode на передаваемое число `code`
+// SetErrCode - для изменения кода ошибки errCode на передаваемое число `code`.
 func (e *extendedErr) SetErrCode(code int) ErrExtender {
 	e.errCode = code
 	return e
 }
 
-// Error - получение основного сообщения ошибки
+// Error - получение основного сообщения ошибки.
 func (e *extendedErr) Error() string {
 	return e.msg
 }
 
-// GetAltMsg - получение альтернативного сообщения ошибки
+// GetAltMsg - получение альтернативного сообщения ошибки.
 func (e *extendedErr) GetAltMsg() string {
 	return e.altMsg
 }
 
-// GetErrCode - получение кода ошибки
+// GetErrCode - получение кода ошибки.
 func (e *extendedErr) GetErrCode() int {
 	return e.errCode
 }
 
-// GetTraceRows - получение списка объектов traceRow
+// GetTraceRows - получение списка объектов traceRow.
 func (e *extendedErr) GetTraceRows() []traceRow {
 	return e.trace
 }
 
-// AddMsg - add text to the beginning of the message
+// AddMsg - add text to the beginning of the message.
 func (e *extendedErr) AddMsg(msg string) ErrExtender {
 	e.msg = fmt.Sprintf("%s: %s", msg, e.msg)
 	return e
 }
 
-// AddAltMsg - add text to the beginning of the alternative message
+// AddAltMsg - add text to the beginning of the alternative message.
 func (e *extendedErr) AddAltMsg(altMsg string) ErrExtender {
 	e.altMsg = fmt.Sprintf("%s: %s", altMsg, e.altMsg)
 	return e
 }
 
-// AddTraceRow - add new trace line in ErrExtender trace array
+// AddTraceRow - add new trace line in ErrExtender trace array.
 func (e *extendedErr) AddTraceRow() ErrExtender {
 	w := where()
 	r := e.trace[len(e.trace)-1]
@@ -102,7 +102,7 @@ func (e *extendedErr) AddTraceRow() ErrExtender {
 }
 
 // TraceRawString() return string from trace array.
-// Every trace line separated by slash.
+//  Every trace line separated by slash.
 func (e *extendedErr) TraceRawString() string {
 	result := ""
 	for _, row := range e.trace {
@@ -113,8 +113,8 @@ func (e *extendedErr) TraceRawString() string {
 }
 
 // TraceTagged() return tagged string from trace array.
-// Every trace line separated by slash.
-// Format: {pkg}:{file}:{function}:{line}
+//  Every trace line separated by slash.
+//  Format: {pkg}:{file}:{function}:{line}.
 func (e *extendedErr) TraceTagged() string {
 	result := ""
 	for _, row := range e.trace {
@@ -131,7 +131,7 @@ func (e *extendedErr) TraceJSON() string {
 }
 
 // Wrap() unite two ErrExtender objects
-// Example: err.Wrap(err2)
+//  Example: err.Wrap(err2)
 func (e *extendedErr) Wrap(w ErrExtender) ErrExtender {
 	e.msg = fmt.Sprintf("%s: %s", e.msg, w.Error())
 	e.altMsg = fmt.Sprintf("%s: %s", e.altMsg, w.GetAltMsg())
@@ -141,7 +141,7 @@ func (e *extendedErr) Wrap(w ErrExtender) ErrExtender {
 }
 
 // New() create ErrExtender with {msg} message and 1 trace line.
-// Example: err := New("Error message")
+//  Example: err := New("Error message")
 func New(msg string) ErrExtender {
 	return &extendedErr{
 		msg:   msg,
@@ -150,8 +150,8 @@ func New(msg string) ErrExtender {
 }
 
 // Newf() create ErrExtender with {msg} message and 1 trace line.
-// Newf() allows you to format numbers, variables and strings into the first {format} parameter you give it
-// Example: err := Newf("Error: %s with code %d", "SQL error", 1005)
+//  Newf() allows you to format numbers, variables and strings into the first {format} parameter you give it
+//  Example: err := Newf("Error: %s with code %d", "SQL error", 1005)
 func Newf(format string, a ...interface{}) ErrExtender {
 	return &extendedErr{
 		msg:   fmt.Errorf(format, a...).Error(),
@@ -160,7 +160,7 @@ func Newf(format string, a ...interface{}) ErrExtender {
 }
 
 // With NewWithErr() You can join {msg} to {builtin.error} message
-// Example: err := NewWithErr("SQL Error: ", err)
+//  Example: err := NewWithErr("SQL Error: ", err)
 func NewWithErr(msg string, err error) ErrExtender {
 	return &extendedErr{
 		msg:   fmt.Sprintf("%s: %s", msg, err),
@@ -169,7 +169,7 @@ func NewWithErr(msg string, err error) ErrExtender {
 }
 
 // NewWithAlt() create ErrExtender with main and alternative messages.
-// Example: err := NewWithAlt("SQL connection error", "<SQL_CONNECTION_ERROR>")
+//  Example: err := NewWithAlt("SQL connection error", "<SQL_CONNECTION_ERROR>")
 func NewWithAlt(msg, altMsg string) ErrExtender {
 	return &extendedErr{
 		msg:    msg,
@@ -178,8 +178,8 @@ func NewWithAlt(msg, altMsg string) ErrExtender {
 	}
 }
 
-// NewWithType() create ErrExtender with ErrType (error code)
-// Example: err := NewWithType("SQL connection error", "<SQL_CONNECTION_ERROR>", ErrType(1005))
+// NewWithType() create ErrExtender with ErrType (error code).
+//  Example: err := NewWithType("SQL connection error", "<SQL_CONNECTION_ERROR>", ErrType(1005))
 func NewWithType(msg, altMsg string, t int) ErrExtender {
 	return &extendedErr{
 		msg:     msg,
@@ -190,8 +190,8 @@ func NewWithType(msg, altMsg string, t int) ErrExtender {
 }
 
 // NewWithExtErr() create new ErrExtender from current {err} ErrExtender object
-// with joining {msg} {altMsg} {errType} and {trace} stack
-// Example: err := NewWithExtErr("SQL auth error", err)
+//  with joining {msg} {altMsg} {errType} and {trace} stack.
+//  Example: err := NewWithExtErr("SQL auth error", err).
 func NewWithExtErr(msg string, err ErrExtender) ErrExtender {
 	return &extendedErr{
 		msg:     fmt.Sprintf("%s: %s", msg, err),
