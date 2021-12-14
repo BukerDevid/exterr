@@ -1,0 +1,174 @@
+{
+    "locale": "en",
+    "error": [
+        {
+            "name": "APIAuthGuard",
+            "error": {
+                "en": "API AuthGuard error",
+                "ru": "API ошибка авторизации"
+            },
+            "alt-error":  {
+                "en": "Authorisation Error",
+                "ru": "Ошибка авторизации"
+            },
+            "code": 401
+        },
+        {
+            "name": "APIGetNomenclatures",
+            "error": {
+                "en": "API get nomenclatures list error",
+                "ru": "API ошибка получения списка номенклатуры"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list nominclature",
+                "ru": "Ошибка получения списка номенклатур"
+            },
+            "code": 500
+        },
+        {
+            "name": "APIFilter",
+            "error": {
+                "en": "API filter error",
+                "ru": "API ошибка фильтра"
+            },
+            "alt-error":  {
+                "en": "Failed filter",
+                "ru": "Не корректный фильтр"
+            },
+            "code": 400
+        },
+        {
+            "name": "APIGetWarehouses",
+            "error": {
+                "en": "API get warehouses list error",
+                "ru": "API ошибка получения списка складов"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list warehouses",
+                "ru": "Ошибка получения списка складов"
+            },
+            "code": 500
+        },
+        {
+            "name": "APIGetRemains",
+            "error": {
+                "en": "API get remains list error",
+                "ru": "API ошибка получения списка остатков"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list remains",
+                "ru": "Ошибка получения списка остатков"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetPrices",
+            "error": {
+                "en": "API get prices list error",
+                "ru": "API ошибка получения списка цен"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list prices",
+                "ru": "Ошибка получения списка цен"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetProducers",
+            "error": {
+                "en": "API get producers list error",
+                "ru": "API ошибка получения списка производителей"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list producers",
+                "ru": "Ошибка получения списка производителей"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetSeparates",
+            "error": {
+                "en": "API get separates list error",
+                "ru": "API ошибка получения списка разделительных ведомостей"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list sheets of separating",
+                "ru": "Ошибка получения списка разделительных ведомостей"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetNomenclatureByID",
+            "error": {
+                "en": "API get nomenclature by ID error",
+                "ru": "API ошибка получения списка номенклатуры по ID"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list nomenclature by ID",
+                "ru": "Ошибка получения списка номенклатур по идентификатору"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetRemainsByID",
+            "error": {
+                "en": "API get remains by ID error",
+                "ru": "API ошибка получения списка цен по ID"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list prices by ID",
+                "ru": "Ошибка получения списка цен по идентификатору"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetPricesByID",
+            "error": {
+                "en": "API get prices by ID error",
+                "ru": "API ошибка получения списка цен по ID"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list prices by ID",
+                "ru": "Ошибка получения списка цен по идентификатору"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetProducersByID",
+            "error": {
+                "en": "API get producers by ID error",
+                "ru": "API ошибка получения списка производителей по ID"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list producers by ID",
+                "ru": "Ошибка получения списка производителей по идентификатору"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetSeparateSheetByID",
+            "error": {
+                "en": "API get separatesheet by ID error",
+                "ru": "API ошибка получения документов планов"
+            },
+            "alt-error":  {
+                "en": "Failed to get the list sheets of separating by ID",
+                "ru": "Ошибка получения списка разделительных ведомостей по идентификатору"
+            },
+            "code": 200
+        },
+        {
+            "name": "APIGetPlanDocs",
+            "error": {
+                "en": "API get plan docs error",
+                "ru": "API ошибка получения документов планов"
+            },
+            "alt-error":  {
+                "en": "Failed to get the plan's docs",
+                "ru": "Ошибка получения списка документов планов"
+            },
+            "code": 200
+        }
+    ]
+}
+

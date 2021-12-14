@@ -3,9 +3,14 @@ package exterr
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
 	"path"
 	"runtime"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 type ErrExtender interface {
@@ -25,21 +30,8 @@ type ErrExtender interface {
 	Wrap(w ErrExtender) ErrExtender
 }
 
-type extendedErr struct {
-	msg     string
-	altMsg  string
-	errCode int
-	trace   []traceRow
-}
+const ERROR_PREFIX = "ERROR_"
 
-type traceRow struct {
-	Package  string `json:"package"`
-	File     string `json:"file"`
-	Function string `json:"function"`
-	Line     int    `json:"line"`
-}
-
-// TODO: @VGulsenikov - нет смысла изменять файлы после инициализации, изменения удобнее и правктичнее писать в altMsg
 // SetMsg - для изменения поля msg на передаваемую строку `msg`
 func (e *extendedErr) SetMsg(msg string) ErrExtender {
 	e.msg = msg
@@ -146,11 +138,16 @@ func (e *extendedErr) Wrap(w ErrExtender) ErrExtender {
 }
 
 // New - create ErrExtender with {msg} message and 1 trace line.
-// Example: err := New("Error message")
+// Example: err := New("Error message") for empty error with new error
+// Example: if err := New("Map-key") for exist error, where map-key from error.json
 func New(msg string) ErrExtender {
-	return &extendedErr{
-		msg:   msg,
-		trace: []traceRow{where()},
+	if err := ErrorByName.GetError(msg); err != nil {
+		return err
+	} else {
+		return &extendedErr{
+			msg:   msg,
+			trace: []traceRow{where()},
+		}
 	}
 }
 
@@ -225,5 +222,76 @@ func where() traceRow {
 		File:     fileName,
 		Function: function,
 		Line:     line,
+	}
+}
+
+//LoadErrorFromFile
+func LoadErrorFromFile(pathToReadFile, namePackage, pathToOutFile string) ErrExtender {
+	errFromFile := make(map[string]*extendedErr)
+	readObject := ReadErrorsModel{}
+	file, err := ioutil.ReadFile(pathToReadFile)
+	if err != nil {
+		return NewWithErr("Error open .json file", err)
+	}
+	err = json.Unmarshal(file, &readObject)
+	if err != nil {
+		return NewWithErr("Error unmarshaling json", err)
+	}
+
+	logrus.Info("Reading locales:", readObject.Locale)
+	for _, errUnit := range readObject.Errors {
+		errFromFile[errUnit.Name] = &extendedErr{
+			msg:     errUnit.Error[readObject.Locale],
+			altMsg:  errUnit.AltError[readObject.Locale],
+			errCode: errUnit.Code,
+		}
+	}
+	ErrorByName = ErrorNames{list: errFromFile}
+	ErrorByName.SetLocal(readObject.Locale)
+
+	if namePackage != "" && pathToOutFile != "" {
+		GenFileConstant(namePackage, pathToOutFile)
+	}
+	return nil
+}
+
+func GenFileConstant(namePackage, pathToFile string) {
+	list := ErrorByName.GetAllKey()
+
+	pathToFile = fmt.Sprintf("%s/errorTypes.go", pathToFile)
+	if _, err := os.Stat(pathToFile); err == nil {
+		os.Remove(pathToFile)
+	}
+
+	file, err := os.OpenFile(pathToFile, os.O_CREATE|os.O_WRONLY, 0777)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	defer file.Close()
+
+	packageName := fmt.Sprintf("package %s\n\n\n", namePackage)
+
+	if _, err := io.WriteString(file, packageName); err != nil {
+		logrus.Error(err)
+		return
+	}
+
+	if _, err := io.WriteString(file, "// This file by generate exterr package\n\n\nconst (\n"); err != nil {
+		logrus.Error(err)
+		return
+	}
+
+	for _, name := range list {
+		newString := fmt.Sprintf("\t%s%s = \"%s\"\n", ERROR_PREFIX, name, name)
+		if _, err := io.WriteString(file, newString); err != nil {
+			logrus.Error(err)
+			return
+		}
+	}
+
+	if _, err := io.WriteString(file, ")\n"); err != nil {
+		logrus.Error(err)
+		return
 	}
 }

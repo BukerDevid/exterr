@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/alexmolinanasaev/exterr"
+	loggo "github.com/bukerdevid/log-go-log"
+	"github.com/sirupsen/logrus"
 )
 
 func errMessage(expected interface{}, got interface{}) string {
@@ -231,4 +233,21 @@ func f3() exterr.ErrExtender {
 	return func() exterr.ErrExtender {
 		return exterr.New("").AddTraceRow()
 	}()
+}
+
+func TestErrorFromFile(t *testing.T) {
+	loggo.InitCastomLogger(&logrus.JSONFormatter{TimestampFormat: "15:04:05 02/01/2006"}, logrus.TraceLevel, false, true)
+	if err := exterr.LoadErrorFromFile("../error.json", "tests", "."); err != nil {
+		logrus.Error(err)
+	}
+
+	printError(exterr.New("Check error"))
+	printError(exterr.New(ERROR_APIAuthGuard))
+	printError(exterr.New(ERROR_APIFilter))
+}
+
+func printError(err exterr.ErrExtender) {
+	logrus.Error(err.Error())
+	logrus.Error(err.GetAltMsg())
+	logrus.Error(err.GetErrCode())
 }

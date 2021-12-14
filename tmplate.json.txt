@@ -1,0 +1,12 @@
+{
+    "name": "APIAuthGuard",
+    "error": {
+        "en": "API AuthGuard error",
+        "ru": "API ошибка авторизации"
+    },
+    "alt-error":  {
+        "en": "Authorisation Error",
+        "ru": "Ошибка авторизации"
+    },
+    "code": 401
+}
